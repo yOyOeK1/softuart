@@ -127,7 +127,7 @@ BOOL softuart_init(uint8_t txpin, uint8_t rxpin, uint32_t baudrate)
   PIN_FUNC_SELECT(s->txpin.gpio_mux_name, s->txpin.gpio_func);  //enable pin as gpio
   PIN_PULLUP_EN(s->txpin.gpio_mux_name); //set pullup (UART idle is VDD)
   GPIO_OUTPUT_SET(GPIO_ID_PIN(s->txpin.gpio_id), 1); //set high for tx idle
-  os_delay_us(100000);
+  os_delay_us((uint16_t)100000);
 
   //init rx pin func
   PIN_FUNC_SELECT(s->rxpin.gpio_mux_name, s->rxpin.gpio_func);  //enable pin as gpio
@@ -303,7 +303,7 @@ STATIC mp_obj_t mp_softuart_make_new(const mp_obj_type_t *type, size_t n_args, s
 
     // configure softuart
     if (!softuart_init((uint8_t)args[ARG_tx].u_int, (uint8_t)args[ARG_rx].u_int, (uint32_t)args[ARG_baudrate].u_int)) {
-      mp_raise_ValueError("softuart cannot intialize");
+      mp_raise_ValueError(MP_ERROR_TEXT("softuart cannot intialize"));
     }
 
     return MP_OBJ_FROM_PTR(self);
